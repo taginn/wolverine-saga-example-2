@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Wolverine;
+using WolverineSagaApi.Data;
 using WolverineSagaApi.Endpoints;
 using WolverineSagaApi.Sagas;
 using WolverineSagaApi.Services;
@@ -7,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddOpenApi();
+
+// Configure Entity Framework with In-Memory database for development
+// In production, replace with a real database provider
+builder.Services.AddDbContext<SagaDbContext>(options =>
+  options.UseInMemoryDatabase("SagaDb"));
 
 // Configure HTTP clients for the three external services
 builder.Services.AddHttpClient("ServiceX", client =>
@@ -39,10 +46,12 @@ builder.Host.UseWolverine(opts =>
   // In production, you would use a durable transport like RabbitMQ, Azure Service Bus, etc.
   opts.LocalQueue("default")
       .Sequential();
+  Configure saga persistence with Entity Framework Core
+  opts.PersistMessagesWithEntityFrameworkCore<SagaDbContext>();
+});
 
-  // Auto-discover handlers and sagas in the application assembly
-  opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
-
+// Add health checks
+builder.Services.AddHealthChecks(
   // Configure policies
   opts.Policies.AutoApplyTransactions();
 
@@ -55,6 +64,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
+  // Map health check endpoint
+  app.MapHealthChecks("/health");
+
 {
   app.MapOpenApi();
 }
