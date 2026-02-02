@@ -73,8 +73,8 @@ ThreeServiceSagaCompleted Event
 #### 5. **Persistence Layer**
 - Entity Framework Core DbContext (`SagaDbContext`)
 - In-memory database for development
-- Saga state persistence with Wolverine EF Core integration
-- Ready for production database (SQL Server, PostgreSQL, etc.)
+- Planned saga state persistence using Wolverine EF Core integration (not yet wired into the runtime configuration)
+- Designed to be adaptable to a production database (SQL Server, PostgreSQL, etc.) once persistence is fully configured
 
 #### 6. **Best Practices**
 ✅ **Messaging**: Event-driven with clear command/event separation for each service  

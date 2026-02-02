@@ -22,6 +22,7 @@ public class SagaDbContext : DbContext
       entity.Property(e => e.RequestId).IsRequired();
       entity.Property(e => e.InitialData).IsRequired();
       entity.Property(e => e.CurrentStep).IsRequired();
+      entity.Ignore(e => e.ServiceMetrics);
     });
   }
 }

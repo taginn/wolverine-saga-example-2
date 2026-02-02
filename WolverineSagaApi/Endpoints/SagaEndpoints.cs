@@ -66,8 +66,7 @@ public static class SagaEndpoints
     })
     .WithName("GetSagaStatus")
     .WithOpenApi()
-    .Produces(StatusCodes.Status200OK)
-    .Produces(StatusCodes.Status404NotFound);
+    .Produces(StatusCodes.Status200OK);
 
     app.MapGet("/api/health", () =>
     {

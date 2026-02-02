@@ -134,7 +134,7 @@ Watch the console output to see:
 
 ## Technologies
 
-- .NET 9.0
-- Wolverine 3.6.1
+- .NET 10.0
+- WolverineFx 5.13.0
 - ASP.NET Core Minimal APIs
 - In-memory message transport (for development)

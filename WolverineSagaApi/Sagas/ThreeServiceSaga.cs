@@ -89,6 +89,7 @@ public class ThreeServiceSaga : Saga
         failed.SagaId, failed.ErrorMessage);
 
     CurrentStep = "Failed";
+    CompletedAt = DateTime.UtcNow;
     MarkCompleted();
 
     return new ThreeServiceSagaFailed(failed.SagaId, "ServiceX", failed.ErrorMessage, DateTime.UtcNow);
@@ -123,6 +124,7 @@ public class ThreeServiceSaga : Saga
         failed.SagaId, failed.ErrorMessage);
 
     CurrentStep = "Failed";
+    CompletedAt = DateTime.UtcNow;
     MarkCompleted();
 
     return new ThreeServiceSagaFailed(failed.SagaId, "ServiceY", failed.ErrorMessage, DateTime.UtcNow);
@@ -165,6 +167,7 @@ public class ThreeServiceSaga : Saga
         failed.SagaId, failed.ErrorMessage);
 
     CurrentStep = "Failed";
+    CompletedAt = DateTime.UtcNow;
     MarkCompleted();
 
     return new ThreeServiceSagaFailed(failed.SagaId, "ServiceZ", failed.ErrorMessage, DateTime.UtcNow);
@@ -203,14 +206,9 @@ public class ServiceXCallRequestedHandler
       }
     }
 
-    if (result.Success)
-    {
-      return new ServiceXCallCompleted(request.SagaId, true, result.ResponseData, DateTime.UtcNow);
-    }
-    else
-    {
-      return new ServiceXCallFailed(request.SagaId, "ServiceX call failed", DateTime.UtcNow);
-    }
+    return result.Success
+      ? new ServiceXCallCompleted(request.SagaId, true, result.ResponseData, DateTime.UtcNow)
+      : new ServiceXCallFailed(request.SagaId, result.Metrics?.GetValueOrDefault("error")?.ToString() ?? "ServiceX call failed", DateTime.UtcNow);
   }
 }
 
@@ -246,14 +244,9 @@ public class ServiceYCallRequestedHandler
       }
     }
 
-    if (result.Success)
-    {
-      return new ServiceYCallCompleted(request.SagaId, true, result.ResponseData, DateTime.UtcNow);
-    }
-    else
-    {
-      return new ServiceYCallFailed(request.SagaId, "ServiceY call failed", DateTime.UtcNow);
-    }
+    return result.Success
+      ? new ServiceYCallCompleted(request.SagaId, true, result.ResponseData, DateTime.UtcNow)
+      : new ServiceYCallFailed(request.SagaId, result.Metrics?.GetValueOrDefault("error")?.ToString() ?? "ServiceY call failed", DateTime.UtcNow);
   }
 }
 
@@ -289,14 +282,9 @@ public class ServiceZCallRequestedHandler
       }
     }
 
-    if (result.Success)
-    {
-      return new ServiceZCallCompleted(request.SagaId, true, result.ResponseData, DateTime.UtcNow);
-    }
-    else
-    {
-      return new ServiceZCallFailed(request.SagaId, "ServiceZ call failed", DateTime.UtcNow);
-    }
+    return result.Success
+      ? new ServiceZCallCompleted(request.SagaId, true, result.ResponseData, DateTime.UtcNow)
+      : new ServiceZCallFailed(request.SagaId, result.Metrics?.GetValueOrDefault("error")?.ToString() ?? "ServiceZ call failed", DateTime.UtcNow);
   }
 }
 

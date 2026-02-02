@@ -21,8 +21,6 @@ public class ServiceXClient : IServiceXClient
     {
       _logger.LogInformation("ServiceX: Starting call with data: {Data}", data);
 
-      var client = _httpClientFactory.CreateClient("ServiceX");
-
       // Simulate external service call
       await Task.Delay(TimeSpan.FromMilliseconds(300), cancellationToken);
 
@@ -45,6 +43,10 @@ public class ServiceXClient : IServiceXClient
           Timestamp: DateTime.UtcNow,
           Metrics: metrics
       );
+    }
+    catch (OperationCanceledException)
+    {
+      throw;
     }
     catch (Exception ex)
     {
@@ -89,8 +91,6 @@ public class ServiceYClient : IServiceYClient
       _logger.LogInformation("ServiceY: Starting call with data: {Data}, ServiceXResult: {ServiceXResult}",
           data, serviceXResult);
 
-      var client = _httpClientFactory.CreateClient("ServiceY");
-
       // Simulate external service call with different timing
       await Task.Delay(TimeSpan.FromMilliseconds(450), cancellationToken);
 
@@ -114,6 +114,10 @@ public class ServiceYClient : IServiceYClient
           Timestamp: DateTime.UtcNow,
           Metrics: metrics
       );
+    }
+    catch (OperationCanceledException)
+    {
+      throw;
     }
     catch (Exception ex)
     {
@@ -158,8 +162,6 @@ public class ServiceZClient : IServiceZClient
       _logger.LogInformation("ServiceZ: Starting final call with data: {Data}, ServiceYResult: {ServiceYResult}",
           data, serviceYResult);
 
-      var client = _httpClientFactory.CreateClient("ServiceZ");
-
       // Simulate external service call with different timing
       await Task.Delay(TimeSpan.FromMilliseconds(600), cancellationToken);
 
@@ -184,6 +186,10 @@ public class ServiceZClient : IServiceZClient
           Timestamp: DateTime.UtcNow,
           Metrics: metrics
       );
+    }
+    catch (OperationCanceledException)
+    {
+      throw;
     }
     catch (Exception ex)
     {

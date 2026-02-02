@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Wolverine;
 using WolverineSagaApi.Data;
@@ -65,7 +66,17 @@ if (app.Environment.IsDevelopment())
   app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+// Configure forwarded headers for container/proxy deployments
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+  ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+// Only use HTTPS redirection in non-containerized environments
+if (!app.Environment.IsProduction())
+{
+  app.UseHttpsRedirection();
+}
 
 // Map saga endpoints
 app.MapSagaEndpoints();
