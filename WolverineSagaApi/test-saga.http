@@ -1,0 +1,29 @@
+### Health Check
+GET http://localhost:5000/api/health
+
+###
+
+### Start a new three-service saga
+POST http://localhost:5000/api/saga/start
+Content-Type: application/json
+
+{
+  "requestId": "req-001",
+  "initialData": "test-data-123"
+}
+
+###
+
+### Check saga status (replace {sagaId} with actual ID from start response)
+GET http://localhost:5000/api/saga/status/your-saga-id-here
+
+###
+
+### Start another saga with different data
+POST http://localhost:5000/api/saga/start
+Content-Type: application/json
+
+{
+  "requestId": "req-002",
+  "initialData": "another-test"
+}
