@@ -121,12 +121,12 @@ info: 🎊 FINAL SAGA COMPLETION: SagaId=abc-123
 
 ### API Endpoints
 
-| Endpoint | Method | Description | Response |
-|----------|--------|-------------|----------|
-| `/health` | GET | Health check | `Healthy` |
-| `/api/health` | GET | API health check | JSON with status |
-| `/api/saga/start` | POST | Start a new three-service saga | 202 Accepted with SagaId |
-| `/api/saga/status/{sagaId}` | GET | Check saga status | Saga status information |
+| Endpoint                    | Method | Description                    | Response                 |
+| --------------------------- | ------ | ------------------------------ | ------------------------ |
+| `/health`                   | GET    | Health check                   | `Healthy`                |
+| `/api/health`               | GET    | API health check               | JSON with status         |
+| `/api/saga/start`           | POST   | Start a new three-service saga | 202 Accepted with SagaId |
+| `/api/saga/status/{sagaId}` | GET    | Check saga status              | Saga status information  |
 
 ### Project Structure
 

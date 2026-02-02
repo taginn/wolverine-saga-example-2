@@ -46,27 +46,21 @@ builder.Host.UseWolverine(opts =>
   // In production, you would use a durable transport like RabbitMQ, Azure Service Bus, etc.
   opts.LocalQueue("default")
       .Sequential();
-  Configure saga persistence with Entity Framework Core
-  opts.PersistMessagesWithEntityFrameworkCore<SagaDbContext>();
+
+  // Auto-discover handlers and sagas in the application assembly
+  opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
+
+  // Configure policies
+  opts.Policies.AutoApplyTransactions();
 });
 
 // Add health checks
-builder.Services.AddHealthChecks(
-  // Configure policies
-  opts.Policies.AutoApplyTransactions();
-
-  // Optional: Configure saga persistence
-  // For production, you would add EF Core or other persistence
-  // opts.PersistMessagesWithEntityFramework<SagaDbContext>();
-});
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
-  // Map health check endpoint
-  app.MapHealthChecks("/health");
-
 {
   app.MapOpenApi();
 }
@@ -79,6 +73,9 @@ app.MapSagaEndpoints();
 app.Logger.LogInformation("🚀 Wolverine Three-Service Saga API is starting...");
 app.Logger.LogInformation("📝 Available endpoints:");
 app.Logger.LogInformation("   POST /api/saga/start - Start a new saga");
+// Map health check endpoint
+app.MapHealthChecks("/health");
+
 app.Logger.LogInformation("   GET  /api/saga/status/{{sagaId}} - Get saga status");
 app.Logger.LogInformation("   GET  /api/health - Health check");
 
